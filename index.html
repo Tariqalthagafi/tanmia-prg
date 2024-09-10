@@ -28,27 +28,27 @@
       object-fit: cover;
     }
 
-    /* Text position for the first image (move lower) */
+    /* Text position and color for the first image */
     #displayText1 {
       position: absolute;
-      top: 35%;  /* Moved lower */
+      top: 35%;  /* Positioned lower */
       right: 10%;
-      color: #16ac7d;
+      color: #16ac7d;  /* Green text */
       font-size: 1.3rem;
       font-weight: bold;
-      font-family: 'IBM Plex Sans Arabic', sans-serif; /* Apply font */
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
     }
 
-    /* Text position for the second image (move lower) */
+    /* Text position and color for the second image */
     #displayText2 {
       position: absolute;
-      top: 80%;  /* Moved lower */
+      top: 80%;  /* Positioned further down */
       left: 50%;
       transform: translateX(-50%);
-      color: white;
+      color: white;  /* White text */
       font-size: 1.3rem;
       font-weight: bold;
-      font-family: 'IBM Plex Sans Arabic', sans-serif; /* Apply font */
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
     }
 
     /* Ensure the images are the same size on larger screens */
@@ -104,7 +104,7 @@
     </div>
 
     <div class="container align-items-center mt-3">
-        <h5 class="justify-content-center">يوم وطني سعيد</h5>
+      <h5 class="justify-content-center">يوم وطني سعيد</h5>
     </div>
   </div>
 
@@ -119,38 +119,30 @@
     });
 
     function downloadImage(imageId, textId) {
-      // Create a canvas to draw the image and text
       var canvas = document.createElement('canvas');
       var ctx = canvas.getContext('2d');
-      
-      // Get the image and the text to be drawn
       var image = document.getElementById(imageId);
       var text = document.getElementById(textId).textContent;
 
-      // Set canvas size equal to the image size
-      canvas.width = image.width;
-      canvas.height = image.height;
+      // Set canvas size equal to the displayed image size
+      canvas.width = image.clientWidth;
+      canvas.height = image.clientHeight;
 
       // Draw the image onto the canvas
-      ctx.drawImage(image, 0, 0);
+      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
-      // Style the text to match the overlay style, using the chosen font
+      // Set up text styling
       ctx.font = "24px 'IBM Plex Sans Arabic', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.shadowColor = "black";
       ctx.shadowBlur = 7;
 
-      // Adjust the position and color of the text based on the image ID
+      // Adjust text color and position based on the image ID
       var textX = canvas.width / 2;
-      var textY = canvas.height * 0.7;
-      if (imageId === 'image1') {
-        ctx.fillStyle = "#16ac7d"; // Green text for image 1
-      } else {
-        ctx.fillStyle = "white"; // White text for image 2
-      }
+      var textY = canvas.height * (imageId === 'image1' ? 0.35 : 0.7);
 
-      // Draw the text over the image
+      ctx.fillStyle = (imageId === 'image1') ? "#16ac7d" : "white";
       ctx.fillText(text, textX, textY);
 
       // Create the download link
@@ -160,6 +152,5 @@
       link.click();
     }
   </script>
-    
 </body>
 </html>

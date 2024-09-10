@@ -59,9 +59,12 @@
       }
     }
 
-    /* Download and Copy button styling */
-    .btn-custom {
-      margin-top: 10px;
+    /* Download button styling */
+    .download-icon {
+      font-size: 24px;
+      color: #007bff;
+      cursor: pointer;
+      text-decoration: none;
     }
   </style>
 </head>
@@ -83,9 +86,8 @@
           <img id="image1" src="p1.png" alt="Image 1">
           <div class="overlay-text" id="displayText1"></div>
         </div>
-        <!-- Download and Copy Buttons for Image 1 -->
-        <button class="btn btn-outline-success btn-custom" onclick="downloadImage('image1', 'displayText1')">تحميل</button>
-        <button class="btn btn-outline-primary btn-custom" onclick="copyImageToClipboard('image1', 'displayText1')">نسخ</button>
+        <!-- Download Button for Image 1 -->
+        <button class="btn btn-outline-success mt-2" onclick="downloadImage('image1', 'displayText1')">تحميل</button>
       </div>
     </div>
 
@@ -96,9 +98,8 @@
           <img id="image2" src="p2.png" alt="Image 2">
           <div class="overlay-text" id="displayText2"></div>
         </div>
-        <!-- Download and Copy Buttons for Image 2 -->
-        <button class="btn btn-outline-success btn-custom" onclick="downloadImage('image2', 'displayText2')">تحميل</button>
-        <button class="btn btn-outline-primary btn-custom" onclick="copyImageToClipboard('image2', 'displayText2')">نسخ</button>
+        <!-- Download Button for Image 2 -->
+        <button class="btn btn-outline-success mt-2" onclick="downloadImage('image2', 'displayText2')">تحميل</button>
       </div>
     </div>
 
@@ -123,61 +124,32 @@
       var image = document.getElementById(imageId);
       var text = document.getElementById(textId).textContent;
 
+      // Set canvas size equal to the displayed image size
       canvas.width = image.clientWidth;
       canvas.height = image.clientHeight;
 
+      // Draw the image onto the canvas
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
+      // Set up text styling
       ctx.font = "24px 'IBM Plex Sans Arabic', sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.shadowColor = "black";
       ctx.shadowBlur = 7;
 
+      // Adjust text color and position based on the image ID
       var textX = canvas.width / 2;
       var textY = canvas.height * (imageId === 'image1' ? 0.35 : 0.7);
 
       ctx.fillStyle = (imageId === 'image1') ? "#16ac7d" : "white";
       ctx.fillText(text, textX, textY);
 
+      // Create the download link
       var link = document.createElement('a');
       link.download = 'tanmia.png';
       link.href = canvas.toDataURL('image/png');
       link.click();
-    }
-
-    async function copyImageToClipboard(imageId, textId) {
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('2d');
-      var image = document.getElementById(imageId);
-      var text = document.getElementById(textId).textContent;
-
-      canvas.width = image.clientWidth;
-      canvas.height = image.clientHeight;
-
-      ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-      ctx.font = "24px 'IBM Plex Sans Arabic', sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.shadowColor = "black";
-      ctx.shadowBlur = 7;
-
-      var textX = canvas.width / 2;
-      var textY = canvas.height * (imageId === 'image1' ? 0.35 : 0.7);
-
-      ctx.fillStyle = (imageId === 'image1') ? "#16ac7d" : "white";
-      ctx.fillText(text, textX, textY);
-
-      try {
-        // Convert the canvas to a Blob and copy it to the clipboard
-        canvas.toBlob(async function(blob) {
-          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-          alert('Image copied to clipboard!');
-        });
-      } catch (err) {
-        alert('Failed to copy image to clipboard. ' + err);
-      }
     }
   </script>
 </body>
